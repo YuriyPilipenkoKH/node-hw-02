@@ -1,10 +1,11 @@
 const express = require('express')
-const books = require('./db/books.json')
+// const books = require('./db/books')
 const contacts = require('./db/contacts.json')
 const products = require('./db/products.json')
 const moment = require('moment')
 const fs = require('fs/promises')
 const cors = require('cors')
+const booksRouter = require('./routes/api/books')
 
 const app = express()
 
@@ -17,13 +18,16 @@ app.use( async(req, res, next) => {
 })
 
 
-const corsMiddleware = cors()
-app.use(corsMiddleware)
 
-app.get('/books', (req, res) => {
-    res.json(books)
-    // res.send(books)
-})
+app.use(cors())
+app.use(express.json())
+
+app.use('/api/books', booksRouter)
+
+// app.get('/books', (req, res) => {
+//     res.json(books)
+//     // res.send(books)
+// })
 app.get('/contacts', (req, res) => {
     res.json(contacts)
     // res.send(books)
@@ -38,6 +42,11 @@ app.use((req , res) => {
         message: 'Not Found'
     })
 }) 
+
+app.use((err, req, res, next) => {
+    const {status = 500, message = 'Server Error'} = err
+    res.status(status).json({message})
+})
 
 
 // app.get('/', (req, res) => {
