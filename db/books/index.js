@@ -9,9 +9,9 @@ const bookPath = path.join(__dirname, 'books.json')
 const getAll = async () => {
     // const data = await fs.readFile(`${__dirname}/books.json`, 'utf-8' )
     const data = await fs.readFile(bookPath, 'utf-8'  ) //'utf-8'
-//    console.log(data)
-    return JSON.parse(data)
-    return data
+   console.log("data")
+    return JSON.parse(data)  || null
+//     return data
 }
 
 const getById = async (id) => {

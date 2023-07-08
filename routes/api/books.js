@@ -13,6 +13,11 @@ router.get('/', async (req, res) => {
     // res.json(books)
     try {
         const result = await books.getAll()
+        console.log(result)
+        if(!result){
+            throw HttpError(404, 'Not Found All')
+          
+        }
         res.json(result)
     } 
     catch (error) {
@@ -21,12 +26,13 @@ router.get('/', async (req, res) => {
 
 })
 
-router.get('/:id', async(req, res, next) => {
+router.get('/:id', async( req, res, next) => {
     try {
+       
         const {id} = req.params
         const result = await books.getById(id)
         if(!result){
-            throw HttpError(404, 'Not Found')
+            throw HttpError(404, 'Not Found ID')
             // const error = new Error('Not Found')
             // error.status = 404
             // throw error
@@ -37,6 +43,7 @@ router.get('/:id', async(req, res, next) => {
         res.json(result)
     }
      catch (error) {
+
         next(error)
         // const {status = 500, message = 'Server Error'} = error
         // res.status(status).json({
@@ -47,22 +54,46 @@ router.get('/:id', async(req, res, next) => {
 
 router.post('/', async (req, res, next) => {
    try {
-    const {error} = addSchema.validate(req.body  )
+    const {error} = addSchema.validate(req.body)
     if (error) {
         throw HttpError(400, error.message)
     }
-    // const result = await books.add(req.body)
-    // res.status(201).json(result)
+    const result = await books.add(req.body)
+    res.status(201).json(result)
    } 
    catch (error) {
     next(error)
    }
 }) 
-router.put('/:id', (req, res) => {
-    res.json(books[0])
+router.put('/:id',async (req, res,  next) => {
+   try {
+    const {error} = addSchema.validate(req.body)
+    if (error) {
+        throw HttpError(400, error.message)
+    }
+    const {id} = req.params
+    const result = await books.update(id, req.body)
+
+    if(!result){
+        throw HttpError(404, 'Not Found')
+    }
+
+   } 
+   catch (error) {
+    next(error)
+   }
+
 })
-router.delete('/:id', (req, res) => {
-    res.json(books[0])
+router.delete('/:id', async(req, res) => {
+    try {
+        const {id} = req.params
+        const result = await books.del(id)
+        res.status(201).json(result)
+       } 
+       catch (error) {
+        next(error)
+       }
+    
 })
 
 module.exports = router

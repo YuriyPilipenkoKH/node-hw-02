@@ -10,7 +10,7 @@ const booksRouter = require('./routes/api/books')
 const app = express()
 
 app.use( async(req, res, next) => {
-    console.log('midleware')
+    // console.log('midleware')
     const {method, url} = req
     const date = moment().format('DD-MM-YYYY_hh:mm:ss')
     await fs.appendFile('./public/server.log',  `\n${method} ${url} ${date}`)
@@ -21,6 +21,7 @@ app.use( async(req, res, next) => {
 
 app.use(cors())
 app.use(express.json())
+// console.log(express)
 
 app.use('/api/books', booksRouter)
 
@@ -39,7 +40,7 @@ app.get('/products', (req, res) => {
 
 app.use((req , res) => {
     res.status(404).json({
-        message: 'Not Found'
+        // message: 'Not Found Anyting'
     })
 }) 
 
