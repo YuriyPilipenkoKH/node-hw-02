@@ -1,11 +1,12 @@
 const express = require('express')
 // const books = require('./db/books')
-const contacts = require('./db/contacts.json')
+// const contacts = require('./db/contacts.json')
 const products = require('./db/products.json')
 const moment = require('moment')
 const fs = require('fs/promises')
 const cors = require('cors')
 const booksRouter = require('./routes/api/books')
+const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
  
@@ -21,18 +22,19 @@ app.use( async(req, res, next) => {
 
 app.use(cors())
 app.use(express.json())
-// console.log(express)
+
 
 app.use('/api/books', booksRouter)
+app.use('/api/contacts', contactsRouter)
 
 // app.get('/books', (req, res) => {
 //     res.json(books)
 //     // res.send(books)
 // })
-app.get('/contacts', (req, res) => {
-    res.json(contacts)
-    // res.send(books)
-})
+// app.get('/contacts', (req, res) => {
+//     res.json(contacts)
+//     // res.send(books)
+// })
 app.get('/products', (req, res) => {
     res.json(products)
     // res.send(books)
@@ -40,7 +42,7 @@ app.get('/products', (req, res) => {
 
 app.use((req , res) => {
     res.status(404).json({
-        // message: 'Not Found Anyting'
+        message: 'Not Found Anyting'
     })
 }) 
 
